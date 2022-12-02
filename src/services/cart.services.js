@@ -146,10 +146,10 @@ class CartServices {
 				totalPrice,
 				status: "Purchased,",
 			});
-			for (let i = 0; i < ProductInCart.length; i++) {
-				ProductInCart.destroy();
-			}
+
+			await ProductInCart.destroy({ where: { cartId } });
 			return orders;
+
 			//luego tenemos toda la info en cart, le asignamos esta info a un nuevo modelo ORDER
 			//igualamos este cart a [] así queda vacío y podemos seguir añadiendo products
 		} catch (error) {

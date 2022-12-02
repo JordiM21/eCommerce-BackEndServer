@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const authenticate = require("../middlewares/auth.middlewares");
 const {
 	addProductToCart,
 	getAllCarts,
@@ -9,14 +10,116 @@ const {
 
 const router = Router();
 
-router.post("/cart/:cartId", addProductToCart);
+/**
+ * @openapi
+ * /api/v1/cart/{cartId}:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Add product to Cart
+ *     tags:
+ *      - AddToCart
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: cart Id
+ *     requestBody:
+ *       description: Send product id by body and cart i d by params
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/addToCart"
+ *         securitySchemes:
+ *           bearerAuth:
+ *             type: http
+ *             scheme: bearer
+ *             bearerFormat: JWT
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *                   items: {}
+ *   delete:
+ *     summary: Delete product from cart
+ *     tags: [DeleteFromCart]
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: cart id
+ *     requestBody:
+ *       description: In order to delete the product from the cart please send the productId in the body and the cartId by params.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/DeleteFromCart'
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *   put:
+ *     summary: Buy Cart
+ *     tags: [BuyCart]
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: cart id
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/components/schemas/BuyCart"
+ */
 
-router.delete("/cart/:cartId", deleteProductToCart);
+router.post("/cart/:cartId", authenticate, addProductToCart);
 
-router.put("/cart/:cartId", buyCart);
+router.delete("/cart/:cartId", authenticate, deleteProductToCart);
 
-router.get("/cart", getAllCarts);
+router.put("/cart/:cartId", authenticate, buyCart);
 
-router.get("/orders", getOrders);
+router.get("/cart", authenticate, getAllCarts);
+
+router.get("/orders", authenticate, getOrders);
 
 module.exports = router;
