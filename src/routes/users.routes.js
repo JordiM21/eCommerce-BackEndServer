@@ -7,9 +7,8 @@ const router = Router();
  * @openapi
  * /api/v1/users:
  *   get:
- *     summary: get all users
  *     tags:
- *       - Users
+ *       - Get All Users
  *     responses:
  *       200:
  *         description: OK
@@ -24,18 +23,27 @@ const router = Router();
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: "#/components/schemas/Users"
- *
  *   post:
- *     summary: create a new user
- *     tags: [Register]
+ *     summary: Create New User
+ *     tags:
+ *      - Register User
  *     requestBody:
- *       description: In order to create a new User we need you to insert a username, email and a password.
+ *       description: Send the following information to create a user
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/register'
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: Jordi21
+ *               email:
+ *                 type: string
+ *                 example: jordi21@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: 1234
  *     responses:
  *       200:
  *         description: OK
@@ -49,6 +57,8 @@ const router = Router();
  *                   example: OK
  *                 data:
  *                   type: array
+ *                   items: {}
+ *
  */
 router.get("/users", getAllUsers);
 router.post("/users", userRegister);

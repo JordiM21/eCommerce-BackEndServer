@@ -12,6 +12,36 @@ const router = Router();
 
 /**
  * @openapi
+ * /api/v1/cart:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Get Products in Cart
+ *     requestBody:
+ *       description: all products you have in cart
+ *       required: false
+ *       content:
+ *         application/json:
+ *           securitySchemes:
+ *             bearerAuth:
+ *               type: http
+ *               scheme: bearer
+ *               bearerFormat: JWT
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *
  * /api/v1/cart/{cartId}:
  *   post:
  *     security:
@@ -33,12 +63,19 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: "#/components/schemas/addToCart"
- *         securitySchemes:
- *           bearerAuth:
- *             type: http
- *             scheme: bearer
- *             bearerFormat: JWT
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: string
+ *                 example: 1
+ *               quantity:
+ *                 type: string
+ *                 example: 1
+ *           securitySchemes:
+ *             bearerAuth:
+ *               type: http
+ *               scheme: bearer
+ *               bearerFormat: JWT
  *     responses:
  *       200:
  *         description: OK
@@ -54,6 +91,8 @@ const router = Router();
  *                   type: array
  *                   items: {}
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Delete product from cart
  *     tags: [DeleteFromCart]
  *     parameters:
@@ -70,7 +109,16 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/DeleteFromCart'
+ *              type: object
+ *              properties:
+ *                productId:
+ *                  type: string
+ *                  example: 1
+ *           securitySchemes:
+ *             bearerAuth:
+ *               type: http
+ *               scheme: bearer
+ *               bearerFormat: JWT
  *     responses:
  *       200:
  *         description: OK
@@ -85,6 +133,8 @@ const router = Router();
  *                 data:
  *                   type: array
  *   put:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Buy Cart
  *     tags: [BuyCart]
  *     parameters:
@@ -95,6 +145,46 @@ const router = Router();
  *           type: integer
  *           minimum: 1
  *         description: cart id
+ *     requestBody:
+ *       description: In order to buy the cart send the cartId by params.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           securitySchemes:
+ *             bearerAuth:
+ *               type: http
+ *               scheme: bearer
+ *               bearerFormat: JWT
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ * /api/v1/orders:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Get Orders
+ *     requestBody:
+ *       description: All orders you've made (history)
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *           securitySchemes:
+ *             bearerAuth:
+ *               type: http
+ *               scheme: bearer
+ *               bearerFormat: JWT
  *     responses:
  *       200:
  *         description: OK
@@ -109,7 +199,6 @@ const router = Router();
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: "#/components/schemas/BuyCart"
  */
 
 router.post("/cart/:cartId", authenticate, addProductToCart);
