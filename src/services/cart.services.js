@@ -1,9 +1,10 @@
-const { Products, Carts, ProductInCart, Orders } = require("../models");
+const { Products, Carts, ProductInCart, Orders, Users } = require("../models");
 
 class CartServices {
-	static async getAllCarts() {
+	static async getAllCarts(cartId) {
 		try {
-			const cart = await Carts.findAll({
+			const cart = await Carts.findOne({
+				where: { id: cartId },
 				attributes: ["id", "totalPrice"],
 				include: [
 					{
@@ -11,7 +12,6 @@ class CartServices {
 						attributes: [
 							"productId",
 							"quantity",
-							"price",
 						],
 						include: [
 							{
@@ -28,6 +28,10 @@ class CartServices {
 					},
 				],
 			});
+			//si el carrito esta vacío, totalPrice = 0
+			if ((cart.productInCarts = null)) {
+				cart.totalPrice = 0;
+			}
 			return cart;
 		} catch (error) {
 			throw error;
@@ -138,20 +142,18 @@ class CartServices {
 	static async buy(cartId) {
 		try {
 			//buscamos el carrito si existe
-			const cart = await Carts.findOne({
+			const carts = await Carts.findOne({
 				where: { id: cartId },
 			});
-			const { totalPrice } = cart;
+			const { totalPrice } = carts;
 			const orders = await Orders.create({
 				totalPrice,
 				status: "Purchased,",
 			});
 
+			console.log(carts);
 			await ProductInCart.destroy({ where: { cartId } });
 			return orders;
-
-			//luego tenemos toda la info en cart, le asignamos esta info a un nuevo modelo ORDER
-			//igualamos este cart a [] así queda vacío y podemos seguir añadiendo products
 		} catch (error) {
 			throw error;
 		}

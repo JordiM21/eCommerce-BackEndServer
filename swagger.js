@@ -7,7 +7,8 @@ const options = {
 		info: {
 			title: "Ecommerce App",
 			version: "1.0.0",
-			description: "API que replica un ecommerce funcional",
+			description:
+				"API que replica un ecommerce funcional con sus diferentes métodos los cuales podemos acceder despues de loggearnos con nuestro usuario creado previamente, tenemos disponibles funcionalidades como añadir tantos productos querramos al carrito, totalPrice del carrito, comprar el carrito y mandarlo como orden, obtener todos los productos disponibles",
 		},
 	},
 	apis: [

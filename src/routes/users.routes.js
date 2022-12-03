@@ -7,6 +7,7 @@ const router = Router();
  * @openapi
  * /api/v1/users:
  *   get:
+ *     summary: See the active users
  *     tags:
  *       - Get All Users
  *     responses:
@@ -24,7 +25,7 @@ const router = Router();
  *                   type: array
  *                   items:
  *   post:
- *     summary: Create New User
+ *     summary: Create a new User using email, username and password
  *     tags:
  *      - Register User
  *     requestBody:

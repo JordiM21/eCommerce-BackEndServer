@@ -12,36 +12,6 @@ const router = Router();
 
 /**
  * @openapi
- * /api/v1/cart:
- *   get:
- *     security:
- *       - bearerAuth: []
- *     tags:
- *       - Get Products in Cart
- *     requestBody:
- *       description: all products you have in cart
- *       required: false
- *       content:
- *         application/json:
- *           securitySchemes:
- *             bearerAuth:
- *               type: http
- *               scheme: bearer
- *               bearerFormat: JWT
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *
  * /api/v1/cart/{cartId}:
  *   post:
  *     security:
@@ -90,6 +60,40 @@ const router = Router();
  *                 data:
  *                   type: array
  *                   items: {}
+ *   get:
+ *     security:
+ *      - bearerAuth: []
+ *     summary: See the products you've added to the cart, totalPrice of the cart and totalAmount
+ *     tags:
+ *       - Get Products on Cart
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: cart Id
+ *     schema:
+ *       securitySchemes:
+ *             bearerAuth:
+ *               type: http
+ *               scheme: bearer
+ *               bearerFormat: JWT
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *                   items:
  *   delete:
  *     security:
  *       - bearerAuth: []
@@ -136,7 +140,8 @@ const router = Router();
  *     security:
  *       - bearerAuth: []
  *     summary: Buy Cart
- *     tags: [BuyCart]
+ *     tags:
+ *      - Buy Cart
  *     parameters:
  *       - in: path
  *         name: cartId
@@ -144,17 +149,13 @@ const router = Router();
  *         schema:
  *           type: integer
  *           minimum: 1
- *         description: cart id
- *     requestBody:
- *       description: In order to buy the cart send the cartId by params.
- *       required: true
- *       content:
- *         application/json:
- *           securitySchemes:
- *             bearerAuth:
- *               type: http
- *               scheme: bearer
- *               bearerFormat: JWT
+ *         description: cart Id
+ *     schema:
+ *       securitySchemes:
+ *         bearerAuth:
+ *           type: http
+ *           scheme: bearer
+ *           bearerFormat: JWT
  *     responses:
  *       200:
  *         description: OK
@@ -168,23 +169,20 @@ const router = Router();
  *                   example: OK
  *                 data:
  *                   type: array
+ *                   items: {}
  * /api/v1/orders:
  *   get:
+ *     summary: Get all the orders you've done
  *     security:
  *       - bearerAuth: []
  *     tags:
  *       - Get Orders
- *     requestBody:
- *       description: All orders you've made (history)
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *           securitySchemes:
- *             bearerAuth:
- *               type: http
- *               scheme: bearer
- *               bearerFormat: JWT
+ *     schema:
+ *       securitySchemes:
+ *         bearerAuth:
+ *           type: http
+ *           scheme: bearer
+ *           bearerFormat: JWT
  *     responses:
  *       200:
  *         description: OK
@@ -207,7 +205,7 @@ router.delete("/cart/:cartId", authenticate, deleteProductToCart);
 
 router.put("/cart/:cartId", authenticate, buyCart);
 
-router.get("/cart", authenticate, getAllCarts);
+router.get("/cart/:cartId", authenticate, getAllCarts);
 
 router.get("/orders", authenticate, getOrders);
 
